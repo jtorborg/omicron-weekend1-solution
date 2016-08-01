@@ -2,8 +2,11 @@ $(document).ready(function() {
   $("#empFirstName").focus();
   var employees = [];
   var salaryTotal = 0;
+  console.log($("#empInput").data("section"));
 
   // Add new employee
+  $("#empContainer").on("click", ".removeEmployee", removeEmployee);
+
   $("#empForm").on("submit", function(event) {
     event.preventDefault();
 
@@ -30,6 +33,17 @@ $(document).ready(function() {
     $("#salaryTotal").text(salaryTotal);
   }
 
+  function removeEmployee() {
+    var index = $(this).parent().data("id");
+    var thisEmployee = employees[index];
+
+    salaryTotal -= Math.round(thisEmployee.empSalary / 12);
+
+    // clean up DOM
+    $(this).parent().remove();
+    updateSalary();
+  }
+
   function appendDom(empInfo) {
     $("#empContainer").append('<div class="employee"></div>');
     $el = $("#empContainer").children().last();
@@ -38,6 +52,9 @@ $(document).ready(function() {
     $el.append('<p>' + empInfo.empTitle + '</p>');
     $el.append('<p>$' + empInfo.empSalary + '</p>');
     $el.append('<button class="removeEmployee">Remove</button>');
+
+    $el.data("id", employees.length - 1);
+    $el.data("person", empInfo);
   }
 
 });
