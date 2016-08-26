@@ -2,41 +2,51 @@
 <html>
 <head>
   <title>Salary Tracker</title>
-  <script type="text/javascript" src="vendor/jquery-3.1.0.min.js"></script>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
   <script type="text/javascript" src="app.js"></script>
 
   <link rel="stylesheet" href="stylesheet.css" />
 </head>
-<body>
+<body ng-app="myApp" ng-controller="IndexController">
   <section id="empInput" data-section="employee entry">
     <h1>Enter Employee</h1>
+    New Employee: {{newEmployee}}
     <form id="empForm">
-      <label for="empFirstName">First Name:
-        <input type="text" id="empFirstName" name="empFirstName" />
+      <label for="firstName">First Name:
+        <input type="text" ng-model="newEmployee.firstName" id="firstName" name="firstName" />
       </label>
 
-      <label for="empLastName">Last Name:
-        <input type="text" id="empLastName" name="empLastName" />
+      <label for="lastName">Last Name:
+        <input type="text" ng-model="newEmployee.lastName" id="lastName" name="lastName" />
       </label>
 
-      <label for="empIDNumber">ID Number:
-        <input type="text" id="empIDNumber" name="empIDNumber" />
+      <label for="idNumber">ID Number:
+        <input type="text" ng-model="newEmployee.idNumber" id="idNumber" name="idNumber" />
       </label>
 
-      <label for="empTitle">Title:
-        <input type="text" id="empTitle" name="empTitle" />
+      <label for="jobTitle">Title:
+        <input type="text" ng-model="newEmployee.jobTitle" id="jobTitle" name="jobTitle" />
       </label>
 
-      <label for="empSalary">Annual Salary:
-        <input type="number" id="empSalary" name="empSalary" />
+      <label for="annualSalary">Annual Salary:
+        <input type="number" ng-model="newEmployee.annualSalary" id="annualSalary" name="annualSalary" />
       </label>
 
-      <input type="submit" value="Add Employee" />
+      <button ng-click="addEmployee()">Add Employee</button>
     </form>
   </section>
   <section id="empContainer">
     <h1>Employees</h1>
-    <p id="companySalaries">Monthly Salary Total: $<span id="salaryTotal">0.00</span></p>
+    <p id="companySalaries">Monthly Salary Total: <span id="salaryTotal">{{salaryTotal | currency}}</span></p>
+
+    <div class="employee" ng-repeat="employee in employees">
+      <h2>{{employee.firstName + ' ' + employee.lastName}}</h2>
+      <p>{{employee.idNumber}}</p>
+      <p>{{employee.jobTitle}}</p>
+      <p>{{employee.annualSalary | currency}}</p>
+      {{$index}}
+      <button ng-click="removeEmployee($index)">Remove</button>
+    </div>
   </section>
 
 </body>

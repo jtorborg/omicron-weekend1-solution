@@ -1,60 +1,32 @@
-$(document).ready(function() {
-  $("#empFirstName").focus();
-  var employees = [];
-  var salaryTotal = 0;
-  console.log($("#empInput").data("section"));
+var myApp = angular.module("myApp", []);
 
-  // Add new employee
-  $("#empContainer").on("click", ".removeEmployee", removeEmployee);
+myApp.controller("IndexController", ["$scope", function($scope) {
+  console.log('all ready to rock');
 
-  $("#empForm").on("submit", function(event) {
-    event.preventDefault();
+  $scope.newEmployee = {};
+  $scope.employees = [];
+  $scope.salaryTotal = 0;
 
-    var values = {};
-    var formData = $(this).serializeArray();
-    formData.forEach(function(employee, index) {
-      values[employee.name] = employee.value;
-    });
-
-    values.empSalary = parseInt(values.empSalary);
+  $scope.addEmployee = function() {
+    $scope.newEmployee.annualSalary = parseInt($scope.newEmployee.annualSalary);
     // calculate monthly salary from employee's annual
-    salaryTotal += Math.round(values.empSalary / 12);
-    employees.push(values);
-    console.log(values);
+    $scope.salaryTotal += Math.round($scope.newEmployee.annualSalary / 12);
+    $scope.employees.push($scope.newEmployee);
 
-    $("#empForm").find("input[type=text], input[type=number]").val("");
-    $("#empFirstName").focus();
-
-    appendDom(values);
-    updateSalary();
-  });
-
-  function updateSalary() {
-    $("#salaryTotal").text(salaryTotal);
+    // make sure the DOM uses a new empty object
+    $scope.newEmployee = {};
   }
 
-  function removeEmployee() {
-    var index = $(this).parent().data("id");
-    var thisEmployee = employees[index];
-
-    salaryTotal -= Math.round(thisEmployee.empSalary / 12);
-
-    // clean up DOM
-    $(this).parent().remove();
-    updateSalary();
+  $scope.removeEmployee = function(index) {
+    // console.log(employee);
+    $scope.salaryTotal -= Math.round(employee.annualSalary / 12);
+    $scope.employees.splice(index, 1);
   }
+    // $scope.employees.forEach(function(emp, i) {
+    //   if(employee.idNumber == emp.idNumber) {
+    //     // match!
+    //
+    //   }
+    
 
-  function appendDom(empInfo) {
-    $("#empContainer").append('<div class="employee"></div>');
-    $el = $("#empContainer").children().last();
-    $el.append('<h2>' + empInfo.empFirstName + ' ' + empInfo.empLastName + '</h2>');
-    $el.append('<p>' + empInfo.empIDNumber + '</p>');
-    $el.append('<p>' + empInfo.empTitle + '</p>');
-    $el.append('<p>$' + empInfo.empSalary + '</p>');
-    $el.append('<button class="removeEmployee">Remove</button>');
-
-    $el.data("id", employees.length - 1);
-    $el.data("person", empInfo);
-  }
-
-});
+}]);
